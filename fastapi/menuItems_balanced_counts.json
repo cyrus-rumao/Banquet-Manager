@@ -1,0 +1,974 @@
+[
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff2fe"
+    },
+    "name": "Paneer Tikka",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 71
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff2ff"
+    },
+    "name": "Veg Spring Rolls",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 90
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff300"
+    },
+    "name": "Hara Bhara Kabab",
+    "category": "Starter",
+    "isJain": true,
+    "selectionCount": 99
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff301"
+    },
+    "name": "Aloo Tikki Chaat",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 71
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff302"
+    },
+    "name": "Corn & Cheese Balls",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 73
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff303"
+    },
+    "name": "Dahi Puri",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 75
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff304"
+    },
+    "name": "Crispy Mushroom Fry",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 73
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff305"
+    },
+    "name": "Cheese Stuffed Mushrooms",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 95
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff306"
+    },
+    "name": "Tandoori Gobi",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 81
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff307"
+    },
+    "name": "Veg Seekh Kebab",
+    "category": "Starter",
+    "isJain": true,
+    "selectionCount": 88
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff308"
+    },
+    "name": "Soya Chaap Tikka",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 77
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff309"
+    },
+    "name": "Raw Banana Kebab",
+    "category": "Starter",
+    "isJain": true,
+    "selectionCount": 63
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff30a"
+    },
+    "name": "Lotus Stem Chips",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 47
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff30b"
+    },
+    "name": "Water Chestnut Tikki",
+    "category": "Starter",
+    "isJain": true,
+    "selectionCount": 56
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff30c"
+    },
+    "name": "Raw Papaya Salad Shots",
+    "category": "Starter",
+    "isJain": false,
+    "selectionCount": 34
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff30d"
+    },
+    "name": "Dal Makhani",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 84
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff30e"
+    },
+    "name": "Paneer Butter Masala",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 84
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff30f"
+    },
+    "name": "Palak Paneer",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 72
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff310"
+    },
+    "name": "Shahi Paneer",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 86
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff311"
+    },
+    "name": "Veg Kadai",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 95
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff312"
+    },
+    "name": "Aloo Gobi Masala",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 74
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff313"
+    },
+    "name": "Malai Kofta",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 95
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff314"
+    },
+    "name": "Chana Masala",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 75
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff315"
+    },
+    "name": "Rajma Masala",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 81
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff316"
+    },
+    "name": "Baingan Bharta",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 93
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff317"
+    },
+    "name": "Mix Veg Handi",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 84
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff318"
+    },
+    "name": "Jain Paneer Masala",
+    "category": "Main Course",
+    "isJain": true,
+    "selectionCount": 100
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff319"
+    },
+    "name": "Tinda Aloo Sabzi",
+    "category": "Main Course",
+    "isJain": false,
+    "selectionCount": 61
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff31a"
+    },
+    "name": "Suran Masala",
+    "category": "Main Course",
+    "isJain": true,
+    "selectionCount": 82
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff31b"
+    },
+    "name": "Raw Banana Kofta",
+    "category": "Main Course",
+    "isJain": true,
+    "selectionCount": 34
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff31c"
+    },
+    "name": "Gulab Jamun",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 75
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff31d"
+    },
+    "name": "Rasgulla",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 70
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff31e"
+    },
+    "name": "Gajar Ka Halwa",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 70
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff31f"
+    },
+    "name": "Moong Dal Halwa",
+    "category": "Dessert",
+    "isJain": true,
+    "selectionCount": 97
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff320"
+    },
+    "name": "Rasmalai",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 71
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff321"
+    },
+    "name": "Phirni",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 92
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff322"
+    },
+    "name": "Malpua with Rabri",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 70
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff323"
+    },
+    "name": "Jalebi",
+    "category": "Dessert",
+    "isJain": true,
+    "selectionCount": 99
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff324"
+    },
+    "name": "Kheer",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 87
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff325"
+    },
+    "name": "Shahi Tukda",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 81
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff326"
+    },
+    "name": "Imarti",
+    "category": "Dessert",
+    "isJain": true,
+    "selectionCount": 58
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff327"
+    },
+    "name": "Coconut Barfi",
+    "category": "Dessert",
+    "isJain": true,
+    "selectionCount": 64
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff328"
+    },
+    "name": "Fruit Custard",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 23
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff329"
+    },
+    "name": "Thandai Panna Cotta",
+    "category": "Dessert",
+    "isJain": false,
+    "selectionCount": 23
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff32a"
+    },
+    "name": "Fresh Lime Soda",
+    "category": "Beverage",
+    "isJain": false,
+    "selectionCount": 80
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff32b"
+    },
+    "name": "Mango Lassi",
+    "category": "Beverage",
+    "isJain": false,
+    "selectionCount": 84
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff32c"
+    },
+    "name": "Masala Chaas",
+    "category": "Beverage",
+    "isJain": false,
+    "selectionCount": 94
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff32d"
+    },
+    "name": "Rose Sharbat",
+    "category": "Beverage",
+    "isJain": true,
+    "selectionCount": 93
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff32e"
+    },
+    "name": "Thandai",
+    "category": "Beverage",
+    "isJain": true,
+    "selectionCount": 100
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff32f"
+    },
+    "name": "Aam Panna",
+    "category": "Beverage",
+    "isJain": false,
+    "selectionCount": 85
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff330"
+    },
+    "name": "Jal Jeera",
+    "category": "Beverage",
+    "isJain": true,
+    "selectionCount": 87
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff331"
+    },
+    "name": "Virgin Mojito",
+    "category": "Beverage",
+    "isJain": false,
+    "selectionCount": 69
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff332"
+    },
+    "name": "Cold Coffee",
+    "category": "Beverage",
+    "isJain": false,
+    "selectionCount": 62
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff333"
+    },
+    "name": "Kokum Sharbat",
+    "category": "Beverage",
+    "isJain": false,
+    "selectionCount": 30
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff334"
+    },
+    "name": "Kesar Milk",
+    "category": "Beverage",
+    "isJain": true,
+    "selectionCount": 59
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff335"
+    },
+    "name": "Bael Sharbat",
+    "category": "Beverage",
+    "isJain": false,
+    "selectionCount": 40
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff336"
+    },
+    "name": "Pani Puri Station",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 71
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff337"
+    },
+    "name": "Dosa Counter",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 93
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff338"
+    },
+    "name": "Chaat Counter",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 88
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff339"
+    },
+    "name": "Pasta Live Station",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 86
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff33a"
+    },
+    "name": "Paneer Tikka Live Grill",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 92
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff33b"
+    },
+    "name": "Idli-Sambhar Counter",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 81
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff33c"
+    },
+    "name": "Kulfi Counter",
+    "category": "Live Counter",
+    "isJain": true,
+    "selectionCount": 79
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff33d"
+    },
+    "name": "Jalebi Live Fry",
+    "category": "Live Counter",
+    "isJain": true,
+    "selectionCount": 100
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff33e"
+    },
+    "name": "Pizza Live Counter",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 72
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff33f"
+    },
+    "name": "Tawa Paratha Station",
+    "category": "Live Counter",
+    "isJain": true,
+    "selectionCount": 90
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff340"
+    },
+    "name": "Uttapam Counter",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 65
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff341"
+    },
+    "name": "Frankie Roll Station",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 28
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff342"
+    },
+    "name": "Rabri Faluda Counter",
+    "category": "Live Counter",
+    "isJain": false,
+    "selectionCount": 17
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff343"
+    },
+    "name": "Salted Cashews",
+    "category": "Snacks",
+    "isJain": true,
+    "selectionCount": 84
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff344"
+    },
+    "name": "Masala Papad",
+    "category": "Snacks",
+    "isJain": true,
+    "selectionCount": 100
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff345"
+    },
+    "name": "Roasted Makhana",
+    "category": "Snacks",
+    "isJain": true,
+    "selectionCount": 97
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff346"
+    },
+    "name": "Farsan Mix",
+    "category": "Snacks",
+    "isJain": true,
+    "selectionCount": 86
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff347"
+    },
+    "name": "Mini Samosa",
+    "category": "Snacks",
+    "isJain": false,
+    "selectionCount": 81
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff348"
+    },
+    "name": "Kachori",
+    "category": "Snacks",
+    "isJain": false,
+    "selectionCount": 60
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff349"
+    },
+    "name": "Chakli",
+    "category": "Snacks",
+    "isJain": true,
+    "selectionCount": 34
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff34a"
+    },
+    "name": "Methi Mathri",
+    "category": "Snacks",
+    "isJain": true,
+    "selectionCount": 42
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff34b"
+    },
+    "name": "Cheese Straws",
+    "category": "Snacks",
+    "isJain": false,
+    "selectionCount": 31
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff34c"
+    },
+    "name": "Baked Khakhra",
+    "category": "Snacks",
+    "isJain": true,
+    "selectionCount": 49
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff34d"
+    },
+    "name": "Butter Naan",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 89
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff34e"
+    },
+    "name": "Tandoori Roti",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 70
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff34f"
+    },
+    "name": "Laccha Paratha",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 89
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff350"
+    },
+    "name": "Garlic Naan",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 75
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff351"
+    },
+    "name": "Stuffed Paratha",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 82
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff352"
+    },
+    "name": "Puri",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 82
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff353"
+    },
+    "name": "Missi Roti",
+    "category": "Breads",
+    "isJain": true,
+    "selectionCount": 98
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff354"
+    },
+    "name": "Bajra Roti",
+    "category": "Breads",
+    "isJain": true,
+    "selectionCount": 100
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff355"
+    },
+    "name": "Rumali Roti",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 79
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff356"
+    },
+    "name": "Thepla",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 57
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff357"
+    },
+    "name": "Makki Ki Roti",
+    "category": "Breads",
+    "isJain": true,
+    "selectionCount": 36
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff358"
+    },
+    "name": "Beetroot Paratha",
+    "category": "Breads",
+    "isJain": false,
+    "selectionCount": 40
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff359"
+    },
+    "name": "Veg Biryani",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 93
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff35a"
+    },
+    "name": "Paneer Biryani",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 76
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff35b"
+    },
+    "name": "Jeera Rice",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 72
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff35c"
+    },
+    "name": "Kashmiri Pulao",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 78
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff35d"
+    },
+    "name": "Matar Pulao",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 88
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff35e"
+    },
+    "name": "Jain Biryani",
+    "category": "Rice & Biryani",
+    "isJain": true,
+    "selectionCount": 99
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff35f"
+    },
+    "name": "Curd Rice",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 74
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff360"
+    },
+    "name": "Lemon Rice",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 77
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff361"
+    },
+    "name": "Coconut Rice",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 62
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff362"
+    },
+    "name": "Saffron Pulao",
+    "category": "Rice & Biryani",
+    "isJain": true,
+    "selectionCount": 63
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff363"
+    },
+    "name": "Tamarind Rice",
+    "category": "Rice & Biryani",
+    "isJain": false,
+    "selectionCount": 36
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff364"
+    },
+    "name": "Nachos with Dips",
+    "category": "Other",
+    "isJain": false,
+    "selectionCount": 73
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff365"
+    },
+    "name": "Fruit Platter",
+    "category": "Other",
+    "isJain": true,
+    "selectionCount": 82
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff366"
+    },
+    "name": "Raita",
+    "category": "Other",
+    "isJain": false,
+    "selectionCount": 57
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff367"
+    },
+    "name": "Papad Platter",
+    "category": "Other",
+    "isJain": true,
+    "selectionCount": 57
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff368"
+    },
+    "name": "Pickle & Chutney Set",
+    "category": "Other",
+    "isJain": false,
+    "selectionCount": 52
+  },
+  {
+    "_id": {
+      "$oid": "69c3ebc9dacde015116ff369"
+    },
+    "name": "Mukhwas Station",
+    "category": "Other",
+    "isJain": true,
+    "selectionCount": 30
+  }
+]
