@@ -38,11 +38,7 @@ const Navbar = () => {
 						className="px-5 text-[10px] tracking-[2px] uppercase font-medium text-white/60 hover:text-[#E8B84B] transition-colors">
 						Home
 					</button>
-					<button
-						onClick={() => navigate('/features')}
-						className="px-5 text-[10px] tracking-[2px] uppercase font-medium text-white/60 hover:text-[#E8B84B] transition-colors">
-						Features
-					</button>
+					
 
 					{!user ? (
 						<>

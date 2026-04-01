@@ -1,103 +1,119 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect, lazy, Suspense } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useUserStore } from './stores/useAuthStore';
-// 🔹 Pages (create these files)
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import NotFound from './pages/NotFound';
-import EventDetails from './pages/EventPages/EventDetail';
-import Menu from './pages/EventPages/Menu';
-import AuditLogs from './pages/AuditLogs';
-// import { useEffect } from 'react';
-import CloudinaryUpload from './pages/CloudinaryUpload';
-import PaymentSuccessPage from './pages/PaymentSuccess';
+
+// Components
 import Navbar from './components/Navbar';
 import Loading from './pages/Loading';
+import ProtectedRoute from './ProtectRoute';
+
+// Lazy Pages
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const EventDetails = lazy(() => import('./pages/EventPages/EventDetail'));
+const Menu = lazy(() => import('./pages/EventPages/Menu'));
+const AuditLogs = lazy(() => import('./pages/AuditLogs'));
+const CloudinaryUpload = lazy(() => import('./pages/CloudinaryUpload'));
+const PaymentSuccessPage = lazy(() => import('./pages/PaymentSuccess'));
+
 const Router = () => {
-	// const navigate = useNavigate();
-	const { user, checkAuth, checkingAuth, role } = useUserStore();
-	// const { getCartItems } = useCartStore();
+	const { user, checkAuth, checkingAuth } = useUserStore();
+
 	useEffect(() => {
 		checkAuth();
 	}, [checkAuth]);
-	// console.log(user);
-	// console.log("Role:", role);
+
 	if (checkingAuth) return <Loading />;
+
+	const authorizedRoles = ['ADMIN', 'SALES', 'FINANCE', 'USER'];
 
 	return (
 		<>
-			<Navbar user={user} role={role} />
-			<Routes>
-				<Route
-					path="/"
-					element={<Home user={user} />}
-				/>
-				<Route
-					path="/login"
-					element={user ? <Navigate to="/dashboard" /> : <Login />}
-				/>
-				<Route
-					path="/register"
-					element={user ? <Navigate to="/dashboard" /> : <Register />}
-				/>
-				<Route
-					path="/dashboard"
-					element={
-						!user ? (
-							<Navigate to="/login" />
-						) : ['ADMIN', 'SALES', 'FINANCE', 'USER'].includes(role) ? (
-							<Dashboard role={role} />
-						) : (
-							<Navigate to="/" />
-						)
-					}
-				/>
-				<Route
-					path="/events/:id"
-					element={<EventDetails />}
-				/>
-				<Route
-					path="/events/:id/menu"
-					element={
-						!user ? (
-							<Navigate to="/login" />
-						) : ['ADMIN', 'SALES', 'FINANCE', 'USER'].includes(role) ? (
-							<Menu />
-						) : (
-							<Navigate to="/" />
-						)
-					}
-				/>
+			<Navbar />
 
-				<Route
-					path="/events/:id/audit-logs"
-					element={
-						!user ? (
-							<Navigate to="/login" />
-						) : ['ADMIN', 'SALES', 'FINANCE', 'USER'].includes(role) ? (
-							<AuditLogs />
-						) : (
-							<Navigate to="/" />
-						)
-					}
-				/>
+			<Suspense fallback={<Loading />}>
+				<Routes>
+					{/* Public */}
+					<Route
+						path="/"
+						element={<Home />}
+					/>
 
-				<Route
-					path="/payment-success"
-					element={<PaymentSuccessPage />}
-				/>
-				<Route
-					path="/image"
-					element={<CloudinaryUpload />}
-				/>
-				{/* Catch-all route */}
-				<Route
-					path="*"
-					element={<NotFound />}
-				/>
-			</Routes>
+					<Route
+						path="/login"
+						element={user ? <Navigate to="/dashboard" /> : <Login />}
+					/>
+
+					<Route
+						path="/register"
+						element={user ? <Navigate to="/dashboard" /> : <Register />}
+					/>
+
+					{/* Protected */}
+					<Route
+						path="/dashboard"
+						element={
+							<ProtectedRoute allowedRoles={authorizedRoles}>
+								<Dashboard />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/events/:id"
+						element={
+							<ProtectedRoute allowedRoles={authorizedRoles}>
+								<EventDetails />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/events/:id/menu"
+						element={
+							<ProtectedRoute allowedRoles={authorizedRoles}>
+								<Menu />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/events/:id/audit-logs"
+						element={
+							<ProtectedRoute allowedRoles={authorizedRoles}>
+								<AuditLogs />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/payment-success"
+						element={
+							<ProtectedRoute allowedRoles={authorizedRoles}>
+								<PaymentSuccessPage />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/image"
+						element={
+							<ProtectedRoute allowedRoles={authorizedRoles}>
+								<CloudinaryUpload />
+							</ProtectedRoute>
+						}
+					/>
+
+					{/* Fallback */}
+					<Route
+						path="*"
+						element={<NotFound />}
+					/>
+				</Routes>
+			</Suspense>
 		</>
 	);
 };

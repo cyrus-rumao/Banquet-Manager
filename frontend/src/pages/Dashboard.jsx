@@ -14,7 +14,7 @@ const Dashboard = ({ role }) => {
 	if (role === 'ADMIN') return <AdminDashboard />;
 	if (role === 'SALES') return <SalesDashboard />;
 	if (role === 'FINANCE') return <FinanceDashboard />;
-  if (role === 'USER') return <UserDashboard />;
+	if (role === 'USER') return <UserDashboard />;
 	if (role === 'GRE') return <div>GRE Dashboard</div>;
 
 	return <div>Invalid role</div>;
