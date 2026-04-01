@@ -1,103 +1,192 @@
-import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { connectRedis } from '../config/redis.js';
 
-export const login = async (req, res) => {
-	const { email, password } = req.body;
+const generateTokens = (userId) => {
+	const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
+		expiresIn: '15m',
+	});
+	const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
+		expiresIn: '7d',
+	});
+	// console.log('Tokens: ', accessToken, refreshToken);
+	return { accessToken, refreshToken };
+};
 
+const storeRefreshToken = async (refreshToken, userId) => {
 	try {
-		// console.log('Searching for email:', `|${email}|`); // pipes | show hidden spaces
-		// console.log('Mongoose is looking in collection:', User.collection.name);
-		const user = await User.findOne({
-			email,
-		});
+		const user = await User.findById(userId).select('email');
+		if (!user) return;
 
-		if (!user) {
-			const allUsers = await User.find({}, 'email');
-			console.log(
-				'Existing emails in DB:',
-				allUsers.map((u) => `|${u.email}|`),
-			);
-			return res.status(404).json({ message: 'User not found' });
-		}
-		console.log(password);
-		console.log(user);
-		const isMatch = password === user.password; // In production, use bcrypt to compare hashed passwords
-		if (!isMatch) {
-			return res.status(401).json({ message: 'Invalid credentials' });
-		}
-
-		const token = jwt.sign(
-			{ id: user._id, role: user.role },
-			process.env.JWT_SECRET,
-			{
-				expiresIn: '24h',
-			},
+		await connectRedis().hset(
+			`refresh_token:${user._id}`,
+			'token',
+			refreshToken,
+			'email',
+			user.email,
 		);
 
-		res.status(200).json({ token, message: 'Login successful', user });
-	} catch (error) {
-		res.status(500).json({ message: 'Error in login', error: error.message });
+		await connectRedis().expire(`refresh_token:${userId}`, 7 * 24 * 60 * 60);
+	} catch (err) {
+		console.log(err);
 	}
 };
 
-export const register = async (req, res) => {
+const setCookies = (res, accessToken, refreshToken) => {
+	(res.cookie('accessToken', accessToken, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === 'production' ? true : false,
+		sameSite: 'lax',
+		maxAge: 15 * 60 * 1000,
+	}),
+		res.cookie('refreshToken', refreshToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production' ? true : false,
+			sameSite: 'lax',
+			maxAge: 7 * 24 * 60 * 60 * 1000,
+		}));
+};
+
+export const signup = async (req, res) => {
+	const { name, email, phone, password } = req.body;
 	try {
-		const { name, email, password, role, phone } = req.body;
-
-		if (!name || !email || !password || !role) {
-			return res
-				.status(400)
-				.json({ message: 'Please provide all required fields' });
-		}
-
-		// 2. Check if user already exists (Standardizes email to lowercase)
-		const userExists = await User.findOne({
-			email: email.toLowerCase().trim(),
+		const existinguser = await User.findOne({
+			$or: [{ email }, { phone }],
 		});
-		if (userExists) {
+		if (existinguser) {
 			return res
 				.status(400)
-				.json({ message: 'User already exists with this email' });
+				.json({ message: 'User already exists', success: false });
 		}
+		const hashedPassword = await bcrypt.hash(password, 10);
 
-		// 3. Create the User (Password stored as raw string as requested)
 		const user = await User.create({
 			name,
-			email: email.toLowerCase().trim(),
-			password,
-			role: role.toUpperCase(), // Ensure it matches your ENUM ['ADMIN', 'SALES', etc]
+			email,
 			phone,
-			isActive: true,
+			password: hashedPassword,
 		});
 
-		// 4. Generate Token so they are logged in immediately after registration
-		const token = jwt.sign(
-			{ id: user._id, role: user.role },
-			process.env.JWT_SECRET,
-			{
-				expiresIn: '24h',
-			},
-		);
+		const { accessToken, refreshToken } = generateTokens(user._id);
+		await storeRefreshToken(refreshToken, user._id);
 
+		setCookies(res, accessToken, refreshToken);
 
-		res.status(201).json({
-			message: 'User registered successfully',
-			token,
-			user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        isActive: user.isActive,
-        lastLogin: user.lastLogin,
-      },
+		await user.save();
+		return res.status(201).json({
+			_id: user._id,
+			name: user.name,
+			password: user.password,
+			email: user.email,
+			phone: user.phone,
+			role: user.role,
 		});
 	} catch (error) {
-		console.error('Registration Error:', error);
-		res.status(500).json({
-			message: 'Error in registration',
-			error: error.message,
+		console.log(error);	
+		return res.status(500).json({ message: 'Error in Auth Controller' });
+	}
+};
+export const login = async (req, res) => {
+	const { email, password } = req.body;
+	try {
+		const existinguser = await User.findOne({ email });
+
+		if (
+			!existinguser ||
+			!(await bcrypt.compare(password, existinguser.password))
+		) {
+			return res.status(400).json({ message: 'Invalid credentials' });
+		}
+		// console.log("Generating Tokens! for User: ❌", email);
+
+		const { accessToken, refreshToken } = generateTokens(existinguser._id);
+		// console.log("Storing Tokens for ❌", email);
+		await storeRefreshToken(refreshToken, existinguser._id);
+
+		setCookies(res, accessToken, refreshToken);
+
+		return res.status(200).json({
+			message: 'Login successful',
+			success: true,
+			user: {
+				_id: existinguser._id,
+				name: existinguser.name,
+				email: existinguser.email,
+				role: existinguser.role,
+			},
 		});
+	} catch (error) {
+		console.error('Error in login Controller:', error);
+		return res.status(500).json({ message: 'Internal server error' });
+	}
+};
+
+export const logout = async (req, res) => {
+	try {
+		const refreshToken = req.cookies.refreshToken;
+		if (refreshToken) {
+			const decoded = jwt.verify(
+				refreshToken,
+				process.env.REFRESH_TOKEN_SECRET,
+			);
+			await connectRedis().del(`refresh_token:${decoded.userId}`);
+			res.clearCookie('accessToken');
+			res.clearCookie('refreshToken');
+			return res
+				.status(200)
+				.json({ message: 'Logout successful', success: true });
+		} else {
+			return res.status(400).json({ message: 'No Refresh Token Found' });
+		}
+	} catch (error) {
+		return res.status(500).json({ message: 'Error in Logging out' });
+	}
+};
+
+export const refreshToken = async (req, res) => {
+	try {
+		const refreshToken = req.cookies.refreshToken;
+		if (!refreshToken) {
+			return res.status(400).json({ message: 'No Refresh Token Found' });
+		}
+		if (refreshToken) {
+			const decoded = jwt.verify(
+				refreshToken,
+				process.env.REFRESH_TOKEN_SECRET,
+			);
+			const storedToken = await connectRedis().get(`refresh_token:${decoded.userId}`);
+			if (storedToken !== refreshToken) {
+				return res.status(401).json({ message: 'Unauthorized' });
+			}
+			const accessToken = jwt.sign(
+				{ userId: decoded.userId },
+				process.env.ACCESS_TOKEN_SECRET,
+				{
+					expiresIn: '15m',
+				},
+			);
+
+			res.cookie('accessToken', accessToken, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === 'production' ? true : false,
+				sameSite: 'strict',
+				maxAge: 15 * 60 * 1000,
+			});
+			return res
+				.status(200)
+				.json({ accessToken, message: 'Token Refreshed Successfully' });
+		}
+	} catch (error) {
+		console.log('Error in Refreshing Token', error);
+		return res.status(500).json({ message: 'Error in Refreshing Token' });
+	}
+};
+
+export const getProfile = async (req, res) => {
+	try {
+		res.json(req.user);
+	} catch (error) {
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };

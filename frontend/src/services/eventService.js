@@ -7,7 +7,7 @@ export const checkConflict = (data) => {
 
 // ✅ create event
 export const createEvent = (data) => {
-  return axios.post("/events", data);
+  return axios.post("/events/", data);
 };
 
 // ✅ get user events

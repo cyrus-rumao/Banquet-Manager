@@ -51,7 +51,7 @@ export const createEvent = async (req, res) => {
 	try {
 		const { partyName, eventType, venue, schedule, client, headcount } =
 			req.body;
-
+		// console.log('Request', req.body);
 		if (!partyName || !eventType || !venue || !schedule || !client) {
 			return res.status(400).json({ message: 'Missing required fields' });
 		}
@@ -59,7 +59,8 @@ export const createEvent = async (req, res) => {
 		// 1. Find a user with the role GRE to assign as Event Manager
 		// In a real app, you might pick a specific one, but for now, let's grab the first one
 		const greUser = await User.findOne({ role: 'GRE', isActive: true });
-
+		// console.log('greUser', greUser._id);
+		console.log(req)
 		if (!greUser) {
 			return res.status(404).json({
 				message: 'No GRE found in system to assign as Event Manager',
@@ -84,12 +85,12 @@ export const createEvent = async (req, res) => {
 			members: [req.user._id, greUser._id], // Both the creator and manager are members
 		});
 
-		res.status(201).json(event);
+		return res.status(201).json(event);
 	} catch (err) {
 		console.error(err);
 		res
 			.status(500)
-			.json({ message: 'Failed to create event', error: err.message });
+			.json({ message: 'Failed to create bruh', error: err.message });
 	}
 };
 
@@ -172,7 +173,7 @@ export const getEventById = async (req, res) => {
 
 		// 🔥 Fetch payment separately
 		const payment = await Payment.findOne({ event: id });
-// console.log(payment)
+		// console.log(payment)
 		res.json({
 			...event.toObject(),
 			payment, // attach it manually

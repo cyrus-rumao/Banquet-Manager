@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { checkConflict, createEvent } from '../services/eventService';
+import { useState, useEffect } from 'react';
+import axios from '../lib/axios';
+import { checkConflict } from '../services/eventService';
+import { useVenueStore } from '../stores/usevenueStore';
+// import { get } from 'mongoose';
 
 const EVENT_TYPES = [
 	'Wedding',
@@ -13,94 +16,52 @@ const EVENT_TYPES = [
 	'Other',
 ];
 
-const venues = [
-	{
-		_id: '69c3edcc1a825bbf87c1ff8f',
-		hall: 'Crystal Ballroom',
-		location: '123 Marine Drive, Mumbai',
-	},
-	{
-		_id: '69c3edcc1a825bbf87c1ff90',
-		hall: 'Sunset Rooftop',
-		location: '45 Bandra West, Mumbai',
-	},
-	{
-		_id: '69c3edcc1a825bbf87c1ff91',
-		hall: 'Emerald Garden Lawn',
-		location: '78 Juhu Beach Road, Mumbai',
-	},
-	{
-		_id: '69c3edcc1a825bbf87c1ff92',
-		hall: 'Royal Banquet Hall B',
-		location: '12 Andheri East, Mumbai',
-	},
-	{
-		_id: '69c3edcc1a825bbf87c1ff93',
-		hall: 'Ocean View Terrace',
-		location: '5 Worli Sea Face, Mumbai',
-	},
-];
-
-const CreateEventModal = ({ setShowModal, refresh }) => {
+const CreateEventModal = ({ setShowModal }) => {
 	const [step, setStep] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
+	const { venues, getVenues } = useVenueStore();
+	// const [venues, setVenues] = useState([]);
+	useEffect(() => {
+		getVenues();
+	}, []);
 
-	const [form, setForm] = useState({
-		partyName: '',
-		eventType: '',
-		venue: '',
-		startDateTime: '',
-		endDateTime: '',
-		client: {
-			name: '',
-			phone: '',
-			email: '',
-			address: '',
-		},
-		headcount: 0,
-	});
+	const [partyName, setPartyName] = useState('');
+	const [eventType, setEventType] = useState('');
+	const [venue, setVenue] = useState('');
+	const [startDateTime, setStartDateTime] = useState('');
+	const [endDateTime, setEndDateTime] = useState('');
+	const [clientName, setClientName] = useState('');
+	const [clientPhone, setClientPhone] = useState('');
+	const [clientEmail, setClientEmail] = useState('');
+	const [clientAddress, setClientAddress] = useState('');
+	const [headcount, setHeadcount] = useState(0);
+	// Fetch venues on mount
+	// useEffect(() => {
+	// 	setVenues(getVenues());
+	// }, [getVenues]);
 
-	const handleChange = (field, value) => {
-		setForm((prev) => ({ ...prev, [field]: value }));
-	};
-
-	const handleClient = (field, value) => {
-		setForm((prev) => ({
-			...prev,
-			client: { ...prev.client, [field]: value },
-		}));
-	};
+	// const handleChange = (field, value) => {
+	// 	setForm((prev) => ({ ...prev, [field]: value }));
+	// };
 
 	const handleNext = async () => {
 		setError('');
-
-		if (
-			!form.partyName ||
-			!form.eventType ||
-			!form.venue ||
-			!form.startDateTime ||
-			!form.endDateTime
-		) {
+		if (!partyName || !eventType || !venue || !startDateTime || !endDateTime) {
 			return setError('Fill all fields');
 		}
-
-		if (new Date(form.startDateTime) >= new Date(form.endDateTime)) {
+		if (new Date(startDateTime) >= new Date(endDateTime)) {
 			return setError('End time must be after start time');
 		}
 
 		try {
 			setLoading(true);
-
 			const res = await checkConflict({
-				venue: form.venue,
-				startDateTime: form.startDateTime,
-				endDateTime: form.endDateTime,
+				venue: venue,
+				startDateTime: startDateTime,
+				endDateTime: endDateTime,
 			});
-
-			if (res.data.ok) {
-				setStep(2);
-			}
+			if (res.data.ok) setStep(2);
 		} catch (err) {
 			setError(err.response?.data?.message || 'Venue already booked');
 		} finally {
@@ -111,247 +72,259 @@ const CreateEventModal = ({ setShowModal, refresh }) => {
 	const submit = async () => {
 		try {
 			setLoading(true);
-
-			await createEvent({
-				partyName: form.partyName,
-				eventType: form.eventType,
-				venue: form.venue,
+			await axios.post('/events/create-event', {
+				partyName: partyName,
+				eventType: eventType,
+				venue: venue,
 				schedule: {
-					startDateTime: form.startDateTime,
-					endDateTime: form.endDateTime,
+					startDateTime: startDateTime,
+					endDateTime: endDateTime,
 				},
-				client: form.client,
-				headcount: {
-					expected: Number(form.headcount),
+				client: {
+					name: clientName,
+					phone: clientPhone,
+					email: clientEmail,
+					address: clientAddress,
 				},
+				headcount: { expected: Number(headcount) },
 			});
-
-			refresh();
 			setShowModal(false);
 		} catch (err) {
-			setError('Failed to create event');
+			setError(err.response?.data?.message || 'Failed to create event');
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	const styles = `
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap');
-    
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    
-    .modal-overlay{position:fixed;inset:0;background:rgba(10,31,68,0.6);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.2s ease}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    
-    .modal{position:fixed;inset:0;background:rgba(10,31,68,0.6);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
-    
-    .modal-card{background:#F5F1E8;border-radius:8px;width:100%;max-width:500px;padding:48px 40px;box-shadow:0 25px 80px rgba(10,31,68,0.25),0 8px 24px rgba(10,31,68,0.12);position:relative;animation:slideUp 0.4s cubic-bezier(.16,1,.3,1)}
-    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-    
-    .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
-    
-    .step-indicator{display:flex;gap:8px;align-items:center}
-    .step{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:1px;background:rgba(10,31,68,0.08);color:rgba(10,31,68,0.35);transition:all 0.2s}
-    .step.active{background:#C9973A;color:#F5F1E8}
-    .step-divider{width:16px;height:1px;background:rgba(10,31,68,0.12)}
-    
-    .close-btn{background:none;border:none;font-size:24px;color:#0A1F44;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;padding:0}
-    .close-btn:hover{color:#C9973A;transform:scale(1.1)}
-    
-    .sec-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#0A1F44;line-height:1.2;letter-spacing:-0.5px;margin-bottom:28px}
-    
-    .form-group{margin-bottom:20px;display:flex;flex-direction:column;gap:6px}
-    
-    input,select{font-family:'DM Sans',sans-serif;width:100%;padding:14px 16px;border:1.5px solid rgba(10,31,68,0.12);border-radius:4px;font-size:14px;color:#0A1F44;background:#FFFFFF;transition:all 0.2s;outline:none}
-    input::placeholder{color:rgba(10,31,68,0.35)}
-    input:focus,select:focus{border-color:#C9973A;background:#FFFFFF;box-shadow:0 0 0 3px rgba(201,151,58,0.1)}
-    
-    select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230A1F44' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
-    
-    .error{background:rgba(220,53,69,0.1);border:1.5px solid rgba(220,53,69,0.3);color:#8B0000;padding:12px 14px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:13px;margin-bottom:20px;line-height:1.4}
-    
-    .btn-group{display:flex;gap:12px;margin-top:32px}
-    
-    button{font-family:'DM Sans',sans-serif;border:none;cursor:pointer;transition:all 0.2s;font-size:14px;font-weight:500;letter-spacing:0.5px}
-    
-    .btn-primary{background:#C9973A;color:#0A1F44;padding:14px 28px;border-radius:4px;flex:1;font-size:15px;font-weight:600}
-    .btn-primary:hover:not(:disabled){background:#E8B84B;transform:translateY(-2px);box-shadow:0 8px 20px rgba(201,151,58,0.25)}
-    .btn-primary:disabled{opacity:0.6;cursor:not-allowed}
-    
-    .btn-secondary{background:rgba(10,31,68,0.08);color:#0A1F44;padding:14px 24px;border-radius:4px;flex:1}
-    .btn-secondary:hover:not(:disabled){background:rgba(10,31,68,0.12);transform:translateY(-2px)}
-    .btn-secondary:disabled{opacity:0.6;cursor:not-allowed}
-    
-    .flex{display:flex;gap:12px}
-    
-    .input-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(10,31,68,0.5);text-transform:uppercase;margin-bottom:4px}
-    
-    @media(max-width:640px){
-      .modal-card{padding:32px 24px;max-width:100%}
-      .sec-title{font-size:24px;margin-bottom:20px}
-      .form-group{margin-bottom:16px}
-      input,select{padding:12px 14px;font-size:13px}
-      .btn-group{flex-direction:column;gap:10px}
-      .btn-primary,.btn-secondary{padding:12px 20px}
-    }
-  `;
+	// Reusable Input Component to keep code clean
 
 	return (
-		<>
-			<style>{styles}</style>
-			<div className="modal">
-				<div className="modal-card">
-					<div className="modal-header">
-						<div className="step-indicator">
-							<div className={`step ${step === 1 ? 'active' : ''}`}>1</div>
-							<div className="step-divider"></div>
-							<div className={`step ${step === 2 ? 'active' : ''}`}>2</div>
+		<div className="fixed inset-0 z-[1000] flex items-center justify-center p-5 bg-[#0A1F44]/60 backdrop-blur-sm animate-in fade-in duration-200">
+			<div className="relative w-full max-w-[500px]  overflow-y-auto bg-[#F5F1E8] rounded-lg shadow-2xl p-10 md:p-12 animate-in slide-in-from-bottom-5 duration-400">
+				{/* Header */}
+				<div className="flex items-center justify-between mb-8">
+					<div className="flex items-center gap-2">
+						<div
+							className={`w-7 h-7 rounded-full flex items-center justify-center font-mono text-[11px] tracking-wider transition-colors ${step === 1 ? 'bg-[#C9973A] text-[#F5F1E8]' : 'bg-[#0A1F44]/10 text-[#0A1F44]/35'}`}>
+							1
 						</div>
-						<button
-							className="close-btn"
-							onClick={() => setShowModal(false)}>
-							×
-						</button>
+						<div className="w-4 h-[1px] bg-[#0A1F44]/10"></div>
+						<div
+							className={`w-7 h-7 rounded-full flex items-center justify-center font-mono text-[11px] tracking-wider transition-colors ${step === 2 ? 'bg-[#C9973A] text-[#F5F1E8]' : 'bg-[#0A1F44]/10 text-[#0A1F44]/35'}`}>
+							2
+						</div>
 					</div>
+					<button
+						onClick={() => setShowModal(false)}
+						className="text-2xl text-[#0A1F44] hover:text-[#C9973A] transition-transform hover:scale-110">
+						×
+					</button>
+				</div>
 
-					{error && <div className="error">⚠ {error}</div>}
+				{error && (
+					<div className="mb-5 p-3.5 bg-red-50 border-[1.5px] border-red-200 text-red-800 text-sm rounded font-sans leading-relaxed">
+						⚠ {error}
+					</div>
+				)}
 
-					{/* STEP 1 - EVENT DETAILS */}
-					{step === 1 && (
-						<>
-							<h2 className="sec-title">Event Details</h2>
+				{step === 1 ? (
+					<>
+						<h2 className="font-playfair text-3xl font-bold text-[#0A1F44] mb-7 leading-tight tracking-tight">
+							Event Details
+						</h2>
 
-							<div className="form-group">
-								<label className="input-label">Event Name</label>
-								<input
-									placeholder="Enter event name"
-									onChange={(e) => handleChange('partyName', e.target.value)}
-								/>
-							</div>
+						<div className="flex flex-col gap-1 mb-5">
+							<label
+								htmlFor="partyName"
+								className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+								Event Name
+							</label>
+							<input
+								id="partyName"
+								className="w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35"
+								placeholder="Enter event name"
+								onChange={(e) => setPartyName(e.target.value)}
+								value={partyName}
+							/>
+						</div>
 
-							<div className="form-group">
-								<label className="input-label">Event Type</label>
-								<select
-									onChange={(e) => handleChange('eventType', e.target.value)}>
-									<option value="">Select event type</option>
-									{EVENT_TYPES.map((t) => (
-										<option
-											key={t}
-											value={t}>
-											{t}
-										</option>
-									))}
-								</select>
-							</div>
+						<div className="flex flex-col gap-1 mb-5">
+							<label
+								htmlFor="eventType"
+								className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+								Event Type
+							</label>
+							<select
+								id="eventType"
+								className={`w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35 appearance-none bg-[url("data:image/svg+xml,%3Csvg_xmlns='http://www.w3.org/2000/svg'_width='12'_height='8'_viewBox='0_0_12_8'%3E%3Cpath_fill='%230A1F44'_d='M1_1l5_5_5-5'/%3E%3C/svg%3E")] bg-no-repeat bg-[right_14px_center] pr-10`}
+								onChange={(e) => setEventType(e.target.value)}
+								value={eventType}>
+								<option value="">Select event type</option>
+								{EVENT_TYPES.map((t) => (
+									<option
+										key={t}
+										value={t}>
+										{t}
+									</option>
+								))}
+							</select>
+						</div>
 
-							<div className="form-group">
-								<label className="input-label">Venue</label>
-								<select onChange={(e) => handleChange('venue', e.target.value)}>
-									<option value="">Select venue</option>
-									{venues.map((v) => (
-										<option
-											key={v._id}
-											value={v._id}>
-											{v.hall} — {v.location}
-										</option>
-									))}
-								</select>
-							</div>
+						<div className="flex flex-col gap-1 mb-5">
+							<label
+								htmlFor="venue"
+								className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+								Venue
+							</label>
+							<select
+								id="venue"
+								className={`w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35 appearance-none bg-[url("data:image/svg+xml,%3Csvg_xmlns='http://www.w3.org/2000/svg'_width='12'_height='8'_viewBox='0_0_12_8'%3E%3Cpath_fill='%230A1F44'_d='M1_1l5_5_5-5'/%3E%3C/svg%3E")] bg-no-repeat bg-[right_14px_center] pr-10`}
+								onChange={(e) => setVenue(e.target.value)}
+								value={venue}>
+								<option value="">Select venue</option>
+								{venues.map((v) => (
+									<option
+										key={v._id}
+										value={v._id}>
+										{v.hall} — {v.location}
+									</option>
+								))}
+							</select>
+						</div>
 
-							<div className="form-group">
-								<label className="input-label">Start Date & Time</label>
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="flex flex-col gap-1 mb-5">
+								<label
+									htmlFor="startDateTime"
+									className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+									Start Date & Time
+								</label>
 								<input
 									type="datetime-local"
-									onChange={(e) =>
-										handleChange('startDateTime', e.target.value)
-									}
+									className="w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35"
+									onChange={(e) => setStartDateTime(e.target.value)}
+									value={startDateTime}
 								/>
 							</div>
-
-							<div className="form-group">
-								<label className="input-label">End Date & Time</label>
+							<div className="flex flex-col gap-1 mb-5">
+								<label
+									htmlFor="endDateTime"
+									className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+									End Date & Time
+								</label>
 								<input
 									type="datetime-local"
-									onChange={(e) => handleChange('endDateTime', e.target.value)}
+									className="w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35"
+									onChange={(e) => setEndDateTime(e.target.value)}
+									value={endDateTime}
 								/>
 							</div>
+						</div>
 
-							<div className="btn-group">
-								<button
-									className="btn-primary"
-									onClick={handleNext}
-									disabled={loading}>
-									{loading ? 'Checking Venue...' : 'Next →'}
-								</button>
-							</div>
-						</>
-					)}
+						<button
+							className="w-full mt-8 bg-[#C9973A] text-[#0A1F44] py-3.5 rounded font-sans font-semibold text-base transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+							onClick={handleNext}
+							disabled={loading}>
+							{loading ? 'Checking Venue...' : 'Next →'}
+						</button>
+					</>
+				) : (
+					<>
+						<h2 className="font-playfair text-3xl font-bold text-[#0A1F44] mb-7 leading-tight tracking-tight">
+							Client Details
+						</h2>
 
-					{/* STEP 2 - CLIENT DETAILS */}
-					{step === 2 && (
-						<>
-							<h2 className="sec-title">Client Details</h2>
+						<div className="flex flex-col gap-1 mb-5">
+							<label
+								htmlFor="name"
+								className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+								Client Name
+							</label>
+							<input
+								className="w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35"
+								placeholder="Client name"
+								onChange={(e) => setClientName(e.target.value)}
+								value={clientName}
+							/>
+						</div>
 
-							<div className="form-group">
-								<label className="input-label">Full Name</label>
-								<input
-									placeholder="Client name"
-									onChange={(e) => handleClient('name', e.target.value)}
-								/>
-							</div>
-
-							<div className="form-group">
-								<label className="input-label">Phone</label>
-								<input
-									placeholder="+91 XXXXX XXXXX"
-									onChange={(e) => handleClient('phone', e.target.value)}
-								/>
-							</div>
-
-							<div className="form-group">
-								<label className="input-label">Email</label>
-								<input
-									type="email"
-									placeholder="client@example.com"
-									onChange={(e) => handleClient('email', e.target.value)}
-								/>
-							</div>
-
-							<div className="form-group">
-								<label className="input-label">Address</label>
-								<input
-									placeholder="Street address"
-									onChange={(e) => handleClient('address', e.target.value)}
-								/>
-							</div>
-
-							<div className="form-group">
-								<label className="input-label">Expected Headcount</label>
+						<div className="md:grid-cols-2 gap-4">
+							<div className="flex flex-col gap-1 mb-5">
+								<label
+									htmlFor="phone"
+									className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+									Client Phone
+								</label>
 								<input
 									type="number"
-									placeholder="Number of guests"
-									onChange={(e) => handleChange('headcount', e.target.value)}
+									className="w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35"
+									placeholder="Client phone"
+									onChange={(e) => setClientPhone(e.target.value)}
+									value={clientPhone}
 								/>
 							</div>
-
-							<div className="flex">
-								<button
-									className="btn-secondary"
-									onClick={() => setStep(1)}>
-									← Back
-								</button>
-								<button
-									className="btn-primary"
-									onClick={submit}
-									disabled={loading}>
-									{loading ? 'Creating...' : 'Create Event'}
-								</button>
+							<div className="flex flex-col gap-1 mb-5">
+								<label
+									htmlFor="partyName"
+									className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+									Event Name
+								</label>
+								<input
+									type="email"
+									className="w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35"
+									placeholder="client@example.com"
+									onChange={(e) => setClientEmail(e.target.value)}
+									value={clientEmail}
+								/>
 							</div>
-						</>
-					)}
-				</div>
+						</div>
+
+						<div className="flex flex-col gap-1 mb-5">
+							<label
+								htmlFor="partyName"
+								className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+								Event Name
+							</label>
+							<input
+								className="w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35"
+								placeholder="Street address"
+								onChange={(e) => setClientAddress(e.target.value)}
+								value={clientAddress}
+							/>
+						</div>
+
+						<div className="flex flex-col gap-1 mb-5">
+							<label
+								htmlFor="partyName"
+								className="font-mono text-[10px] tracking-[2px] text-[#0A1F44]/50 uppercase">
+								Event Name
+							</label>
+							<input
+								type="number"
+								className="w-full px-4 py-3.5 border-[1.5px] border-[#0A1F44]/10 rounded font-sans text-sm text-[#0A1F44] bg-white outline-none transition-all focus:border-[#C9973A] focus:ring-4 focus:ring-[#C9973A]/10 placeholder:text-[#0A1F44]/35"
+								placeholder="Number of guests"
+								onChange={(e) => setHeadcount(e.target.value)}
+								value={headcount}
+							/>
+						</div>
+
+						<div className="flex gap-3 mt-8">
+							<button
+								className="flex-1 bg-[#0A1F44]/10 text-[#0A1F44] py-3.5 rounded font-sans font-medium transition-all hover:-translate-y-0.5"
+								onClick={() => setStep(1)}>
+								← Back
+							</button>
+							<button
+								className="flex-[2] bg-[#C9973A] text-[#0A1F44] py-3.5 rounded font-sans font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60"
+								onClick={submit}
+								disabled={loading}>
+								{loading ? 'Creating...' : 'Create Event'}
+							</button>
+						</div>
+					</>
+				)}
 			</div>
-		</>
+		</div>
 	);
 };
 
